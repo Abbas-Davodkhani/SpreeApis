@@ -51,5 +51,10 @@ namespace SpreeApis.Domain
 
         [JsonProperty("is_leaf", NullValueHandling = NullValueHandling.Ignore)]
         public bool? IsLeaf { get; set; }
+        [JsonProperty("parent", NullValueHandling = NullValueHandling.Ignore)]
+        public long? ParentId { get; set; }
+
+        [JsonProperty("taxonomy", NullValueHandling = NullValueHandling.Ignore)]
+        public long? TaxonomyId { get; set; }
     }
 }

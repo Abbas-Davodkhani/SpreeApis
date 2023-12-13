@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SpreeApis.Migrations
 {
     /// <inheritdoc />
-    public partial class initSpreed : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,13 +58,43 @@ namespace SpreeApis.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "spree_option_values",
+                columns: table => new
+                {
+                    SpreeOptionValueId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Presentation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Position = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_spree_option_values", x => x.SpreeOptionValueId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "spree_optionTypes_optionValues",
+                columns: table => new
+                {
+                    SpreeOptionTypeOptionValueId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SpreeOptionTypeId = table.Column<long>(type: "bigint", nullable: false),
+                    SpreeOptionValueId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_spree_optionTypes_optionValues", x => x.SpreeOptionTypeOptionValueId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "spree_product_images",
                 columns: table => new
                 {
                     SpreeProductImageId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SpreeProductId = table.Column<long>(type: "bigint", nullable: false),
-                    SpreeTmageId = table.Column<long>(type: "bigint", nullable: false)
+                    SpreeImageId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,6 +177,34 @@ namespace SpreeApis.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "spree_taxon_children",
+                columns: table => new
+                {
+                    SpreeTaxonChildrenId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SpreeSupTaxonId = table.Column<long>(type: "bigint", nullable: false),
+                    SpreeSubTaxonId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_spree_taxon_children", x => x.SpreeTaxonChildrenId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "spree_taxon_images",
+                columns: table => new
+                {
+                    SpreeTaxonImageId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SpreeTaxonId = table.Column<long>(type: "bigint", nullable: false),
+                    SpreeImageId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_spree_taxon_images", x => x.SpreeTaxonImageId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "spree_taxons",
                 columns: table => new
                 {
@@ -168,11 +226,41 @@ namespace SpreeApis.Migrations
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     IsRoot = table.Column<bool>(type: "bit", nullable: true),
                     IsChild = table.Column<bool>(type: "bit", nullable: true),
-                    IsLeaf = table.Column<bool>(type: "bit", nullable: true)
+                    IsLeaf = table.Column<bool>(type: "bit", nullable: true),
+                    ParentId = table.Column<long>(type: "bigint", nullable: true),
+                    TaxonomyId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_spree_taxons", x => x.SpreeTaxonId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "spree_variant_images",
+                columns: table => new
+                {
+                    SpreeVariantImageId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SpreeVariantId = table.Column<long>(type: "bigint", nullable: false),
+                    SpreeImageId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_spree_variant_images", x => x.SpreeVariantImageId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "spree_variants_optionValues",
+                columns: table => new
+                {
+                    SpreeVariantOptionValueId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SpreeVariantId = table.Column<long>(type: "bigint", nullable: false),
+                    SpreeOptionValueId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_spree_variants_optionValues", x => x.SpreeVariantOptionValueId);
                 });
 
             migrationBuilder.CreateTable(
@@ -268,33 +356,6 @@ namespace SpreeApis.Migrations
                         principalColumn: "SpreeImageId");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "spree_option_values",
-                columns: table => new
-                {
-                    SpreeOptionValueId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Id = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Presentation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Position = table.Column<long>(type: "bigint", nullable: true),
-                    SpreeOptionTypeId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_spree_option_values", x => x.SpreeOptionValueId);
-                    table.ForeignKey(
-                        name: "FK_spree_option_values_spree_option_types_SpreeOptionTypeId",
-                        column: x => x.SpreeOptionTypeId,
-                        principalTable: "spree_option_types",
-                        principalColumn: "SpreeOptionTypeId");
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_spree_option_values_SpreeOptionTypeId",
-                table: "spree_option_values",
-                column: "SpreeOptionTypeId");
-
             migrationBuilder.CreateIndex(
                 name: "IX_spree_products_PublicMetaDataId",
                 table: "spree_products",
@@ -315,7 +376,13 @@ namespace SpreeApis.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "spree_option_types");
+
+            migrationBuilder.DropTable(
                 name: "spree_option_values");
+
+            migrationBuilder.DropTable(
+                name: "spree_optionTypes_optionValues");
 
             migrationBuilder.DropTable(
                 name: "spree_product_images");
@@ -342,13 +409,22 @@ namespace SpreeApis.Migrations
                 name: "spree_styles");
 
             migrationBuilder.DropTable(
+                name: "spree_taxon_children");
+
+            migrationBuilder.DropTable(
+                name: "spree_taxon_images");
+
+            migrationBuilder.DropTable(
                 name: "spree_taxons");
+
+            migrationBuilder.DropTable(
+                name: "spree_variant_images");
 
             migrationBuilder.DropTable(
                 name: "spree_variants");
 
             migrationBuilder.DropTable(
-                name: "spree_option_types");
+                name: "spree_variants_optionValues");
 
             migrationBuilder.DropTable(
                 name: "spree_images");

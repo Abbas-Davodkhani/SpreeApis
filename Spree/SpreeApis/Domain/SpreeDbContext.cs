@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SpreeModel;
 
 namespace SpreeApis.Domain
 {
@@ -6,10 +7,10 @@ namespace SpreeApis.Domain
     {
         public SpreeDbContext()
         {
-            this.Database.EnsureDeleted();
-            this.Database.EnsureCreated();
+            //this.Database.EnsureDeleted();
+            //this.Database.EnsureCreated();
         }
-
+        public DbSet<PublicMetadata> PublicMetadata { get; set; }
         public DbSet<SpreeOptionType> SpreeOptionTypes { get; set; }
         public DbSet<SpreeOptionValue> SpreeOptionValues { get; set; }
         public DbSet<SpreeProduct> SpreeProducts { get; set; }
@@ -19,6 +20,15 @@ namespace SpreeApis.Domain
         public DbSet<SpreeImage> SpreeImages { get; set; }
         public DbSet<SpreeStyle> SpreeStyles { get; set; }
         public DbSet<SpreeProductVariant> SpreeProductVariants { get; set; }
+        public DbSet<SpreeProductProperty> SpreeProductProperties { get; set; }
+        public DbSet<SpreeProductTaxon> SpreeProductTaxons { get; set; }
+        public DbSet<SpreeProductImage> SpreeProductImages { get; set; }
+        public DbSet<SpreeProductOptionType> SpreeProductOptionTypes { get; set; }
+        public DbSet<SpreeOptionTypeOptionValue> SpreeOptionTypeOptionValues { get; set; }
+        public DbSet<SpreeTaxonChildren> SpreeTaxonChildrens { get; set; }
+        public DbSet<SpreeTaxonImage> SpreeTaxonImages { get; set; }
+        public DbSet<SpreeVariantImage> SpreeVariantImages { get; set; }
+        public DbSet<SpreeVariantOptionValue> SpreeVariantOptionValues { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
@@ -119,6 +129,22 @@ namespace SpreeApis.Domain
 
             modelBuilder.Entity<SpreeProductProperty>()
                 .ToTable("spree_product_properties");
+
+            modelBuilder.Entity<SpreeOptionTypeOptionValue>() // 
+               .ToTable("spree_optionTypes_optionValues");
+
+            modelBuilder.Entity<SpreeTaxonChildren>()
+               .ToTable("spree_taxon_children");
+
+            modelBuilder.Entity<SpreeTaxonImage>()
+               .ToTable("spree_taxon_images");
+
+            modelBuilder.Entity<SpreeVariantImage>()
+               .ToTable("spree_variant_images");
+
+            modelBuilder.Entity<SpreeVariantOptionValue>()
+             .ToTable("spree_variants_optionValues");
+
 
             base.OnModelCreating(modelBuilder);
         }

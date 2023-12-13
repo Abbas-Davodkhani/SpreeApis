@@ -16,7 +16,7 @@ namespace SpreeApis.Domain
         [JsonProperty("position", NullValueHandling = NullValueHandling.Ignore)]
         public long? Position { get; set; }
 
-        [JsonProperty("option_values", NullValueHandling = NullValueHandling.Ignore)]
-        public List<SpreeOptionValue> OptionValues { get; set; }
+        //[JsonProperty("option_values", NullValueHandling = NullValueHandling.Ignore)]
+        //public List<SpreeOptionValue> OptionValues { get; set; }
     }
 }

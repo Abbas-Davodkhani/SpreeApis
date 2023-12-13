@@ -12,8 +12,8 @@ using SpreeApis.Domain;
 namespace SpreeApis.Migrations
 {
     [DbContext(typeof(SpreeDbContext))]
-    [Migration("20231212121228_initSpreed")]
-    partial class initSpreed
+    [Migration("20231213110550_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,25 @@ namespace SpreeApis.Migrations
                     b.ToTable("spree_option_types", (string)null);
                 });
 
+            modelBuilder.Entity("SpreeApis.Domain.SpreeOptionTypeOptionValue", b =>
+                {
+                    b.Property<long>("SpreeOptionTypeOptionValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SpreeOptionTypeOptionValueId"));
+
+                    b.Property<long>("SpreeOptionTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SpreeOptionValueId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SpreeOptionTypeOptionValueId");
+
+                    b.ToTable("spree_optionTypes_optionValues", (string)null);
+                });
+
             modelBuilder.Entity("SpreeApis.Domain.SpreeOptionValue", b =>
                 {
                     b.Property<long>("SpreeOptionValueId")
@@ -98,12 +117,7 @@ namespace SpreeApis.Migrations
                     b.Property<string>("Presentation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("SpreeOptionTypeId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("SpreeOptionValueId");
-
-                    b.HasIndex("SpreeOptionTypeId");
 
                     b.ToTable("spree_option_values", (string)null);
                 });
@@ -188,10 +202,10 @@ namespace SpreeApis.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SpreeProductImageId"));
 
-                    b.Property<long>("SpreeProductId")
+                    b.Property<long>("SpreeImageId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("SpreeTmageId")
+                    b.Property<long>("SpreeProductId")
                         .HasColumnType("bigint");
 
                     b.HasKey("SpreeProductImageId");
@@ -383,6 +397,9 @@ namespace SpreeApis.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Permalink")
                         .HasColumnType("nvarchar(max)");
 
@@ -398,12 +415,53 @@ namespace SpreeApis.Migrations
                     b.Property<string>("SeoTitle")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("TaxonomyId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("SpreeTaxonId");
 
                     b.ToTable("spree_taxons", (string)null);
+                });
+
+            modelBuilder.Entity("SpreeApis.Domain.SpreeTaxonChildren", b =>
+                {
+                    b.Property<long>("SpreeTaxonChildrenId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SpreeTaxonChildrenId"));
+
+                    b.Property<long>("SpreeSubTaxonId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SpreeSupTaxonId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SpreeTaxonChildrenId");
+
+                    b.ToTable("spree_taxon_children", (string)null);
+                });
+
+            modelBuilder.Entity("SpreeApis.Domain.SpreeTaxonImage", b =>
+                {
+                    b.Property<long>("SpreeTaxonImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SpreeTaxonImageId"));
+
+                    b.Property<long>("SpreeImageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SpreeTaxonId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SpreeTaxonImageId");
+
+                    b.ToTable("spree_taxon_images", (string)null);
                 });
 
             modelBuilder.Entity("SpreeApis.Domain.SpreeVariant", b =>
@@ -472,6 +530,44 @@ namespace SpreeApis.Migrations
                     b.ToTable("spree_variants", (string)null);
                 });
 
+            modelBuilder.Entity("SpreeApis.Domain.SpreeVariantImage", b =>
+                {
+                    b.Property<long>("SpreeVariantImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SpreeVariantImageId"));
+
+                    b.Property<long>("SpreeImageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SpreeVariantId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SpreeVariantImageId");
+
+                    b.ToTable("spree_variant_images", (string)null);
+                });
+
+            modelBuilder.Entity("SpreeApis.Domain.SpreeVariantOptionValue", b =>
+                {
+                    b.Property<long>("SpreeVariantOptionValueId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("SpreeVariantOptionValueId"));
+
+                    b.Property<long>("SpreeOptionValueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SpreeVariantId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("SpreeVariantOptionValueId");
+
+                    b.ToTable("spree_variants_optionValues", (string)null);
+                });
+
             modelBuilder.Entity("SpreeModel.PublicMetadata", b =>
                 {
                     b.Property<long>("PublicMetaDataId")
@@ -486,13 +582,6 @@ namespace SpreeApis.Migrations
                     b.HasKey("PublicMetaDataId");
 
                     b.ToTable("PublicMetadata");
-                });
-
-            modelBuilder.Entity("SpreeApis.Domain.SpreeOptionValue", b =>
-                {
-                    b.HasOne("SpreeApis.Domain.SpreeOptionType", null)
-                        .WithMany("OptionValues")
-                        .HasForeignKey("SpreeOptionTypeId");
                 });
 
             modelBuilder.Entity("SpreeApis.Domain.SpreeProduct", b =>
@@ -525,11 +614,6 @@ namespace SpreeApis.Migrations
             modelBuilder.Entity("SpreeApis.Domain.SpreeImage", b =>
                 {
                     b.Navigation("Styles");
-                });
-
-            modelBuilder.Entity("SpreeApis.Domain.SpreeOptionType", b =>
-                {
-                    b.Navigation("OptionValues");
                 });
 #pragma warning restore 612, 618
         }

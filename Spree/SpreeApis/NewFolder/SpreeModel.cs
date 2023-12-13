@@ -10,16 +10,16 @@
     public partial class Temperatures
     {
         [JsonProperty("data")]
-        public List<Datum> Data { get; set; }
+        public List<Datum> Data { get; set; } = new List<Datum>();
 
         [JsonProperty("included")]
-        public List<Included> Included { get; set; }
+        public List<Included> Included { get; set; } = new List<Included>();
 
         [JsonProperty("meta")]
-        public Meta Meta { get; set; }
+        public Meta Meta { get; set; } = new Meta();
 
         [JsonProperty("links")]
-        public Links Links { get; set; }
+        public Links Links { get; set; } = new Links();
     }
 
 
@@ -33,10 +33,10 @@
         public string Type { get; set; }
 
         [JsonProperty("attributes")]
-        public DatumAttributes Attributes { get; set; }
+        public DatumAttributes Attributes { get; set; } = new DatumAttributes();
 
         [JsonProperty("relationships")]
-        public DatumRelationships Relationships { get; set; }
+        public DatumRelationships Relationships { get; set; } = new DatumRelationships();   
     }
 
     public partial class DatumAttributes
@@ -65,8 +65,8 @@
         [JsonProperty("sku")]
         public string Sku { get; set; }
 
-        [JsonProperty("public_metadata")]
-        public PublicMetadata? PublicMetadata { get; set; }
+        //[JsonProperty("public_metadata")]
+        //public PublicMetadata? PublicMetadata { get; set; } 
 
         [JsonProperty("purchasable")]
         public bool Purchasable { get; set; }
@@ -105,31 +105,31 @@
     public partial class DatumRelationships
     {
         [JsonProperty("variants")]
-        public Images Variants { get; set; }
+        public Images Variants { get; set; } = new Images();
 
         [JsonProperty("option_types")]
-        public Images OptionTypes { get; set; }
+        public Images OptionTypes { get; set; } = new Images();
 
         [JsonProperty("product_properties")]
-        public Images ProductProperties { get; set; }
+        public Images ProductProperties { get; set; } = new Images();
 
         [JsonProperty("taxons")]
-        public Images Taxons { get; set; }
+        public Images Taxons { get; set; } = new Images();
 
         [JsonProperty("images")]
-        public Images Images { get; set; }
+        public Images Images { get; set; } = new Images();
 
         [JsonProperty("default_variant")]
-        public DefaultVariant DefaultVariant { get; set; }
+        public DefaultVariant DefaultVariant { get; set; } = new DefaultVariant();
 
         [JsonProperty("primary_variant")]
-        public DefaultVariant PrimaryVariant { get; set; }
+        public DefaultVariant PrimaryVariant { get; set; } = new DefaultVariant();
     }
 
     public partial class DefaultVariant
     {
         [JsonProperty("data")]
-        public Dat Data { get; set; }
+        public Dat Data { get; set; } = new Dat();
     }
 
     public partial class Dat
@@ -144,8 +144,9 @@
 
     public partial class Images
     {
+
         [JsonProperty("data")]
-        public List<Dat> Data { get; set; }
+        public List<Dat> Data { get; set; } = new List<Dat>();
     }
 
     public partial class Included
@@ -158,10 +159,10 @@
         public string Type { get; set; }
 
         [JsonProperty("attributes")]
-        public IncludedAttributes Attributes { get; set; }
+        public IncludedAttributes Attributes { get; set; } = new IncludedAttributes();
 
         [JsonProperty("relationships", NullValueHandling = NullValueHandling.Ignore)]
-        public IncludedRelationships Relationships { get; set; }
+        public IncludedRelationships Relationships { get; set; } = new IncludedRelationships();
     }
 
     public partial class IncludedAttributes
@@ -187,8 +188,8 @@
         [JsonProperty("options_text", NullValueHandling = NullValueHandling.Ignore)]
         public string OptionsText { get; set; }
 
-        [JsonProperty("public_metadata", NullValueHandling = NullValueHandling.Ignore)]
-        public PublicMetadata PublicMetadata { get; set; }
+        //[JsonProperty("public_metadata", NullValueHandling = NullValueHandling.Ignore)]
+        //public PublicMetadata? PublicMetadata { get; set; }
 
         [JsonProperty("purchasable", NullValueHandling = NullValueHandling.Ignore)]
         public bool? Purchasable { get; set; }
@@ -272,7 +273,7 @@
         public string TransformedUrl { get; set; }
 
         [JsonProperty("styles", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Style> Styles { get; set; }
+        public List<Style> Styles { get; set; } = new List<Style>();
 
         [JsonProperty("alt", NullValueHandling = NullValueHandling.Ignore)]
         public string Alt { get; set; }
@@ -301,28 +302,28 @@
     public partial class IncludedRelationships
     {
         [JsonProperty("product", NullValueHandling = NullValueHandling.Ignore)]
-        public DefaultVariant Product { get; set; }
+        public DefaultVariant Product { get; set; } = new DefaultVariant();
 
         [JsonProperty("images", NullValueHandling = NullValueHandling.Ignore)]
-        public Images Images { get; set; }
+        public Images Images { get; set; } = new Images();
 
         [JsonProperty("option_values", NullValueHandling = NullValueHandling.Ignore)]
-        public Images OptionValues { get; set; }
+        public Images OptionValues { get; set; } = new Images();
 
         [JsonProperty("vendor", NullValueHandling = NullValueHandling.Ignore)]
-        public DefaultVariant Vendor { get; set; }
+        public DefaultVariant Vendor { get; set; } = new DefaultVariant();
 
         [JsonProperty("parent", NullValueHandling = NullValueHandling.Ignore)]
-        public DefaultVariant Parent { get; set; }
+        public DefaultVariant Parent { get; set; } = new DefaultVariant();
 
         [JsonProperty("taxonomy", NullValueHandling = NullValueHandling.Ignore)]
-        public DefaultVariant Taxonomy { get; set; }
+        public DefaultVariant Taxonomy { get; set; } = new DefaultVariant();
 
         [JsonProperty("children", NullValueHandling = NullValueHandling.Ignore)]
-        public Images Children { get; set; }
+        public Images Children { get; set; } = new Images();
 
         [JsonProperty("image", NullValueHandling = NullValueHandling.Ignore)]
-        public DefaultVariant Image { get; set; }
+        public DefaultVariant Image { get; set; } = new DefaultVariant();
     }
 
     public partial class Links
@@ -355,13 +356,13 @@
         public long TotalPages { get; set; }
 
         [JsonProperty("filters")]
-        public Filters Filters { get; set; }
+        public Filters Filters { get; set; } = new Filters();
     }
 
     public partial class Filters
     {
         [JsonProperty("option_types")]
-        public List<Option> OptionTypes { get; set; }
+        public List<Option> OptionTypes { get; set; } = new List<Option>();
 
         [JsonProperty("product_properties")]
         public List<object> ProductProperties { get; set; }
@@ -379,7 +380,7 @@
         public string Presentation { get; set; }
 
         [JsonProperty("option_values", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Option> OptionValues { get; set; }
+        public List<Option> OptionValues { get; set; } = new List<Option>();
 
         [JsonProperty("position", NullValueHandling = NullValueHandling.Ignore)]
         public long? Position { get; set; }
