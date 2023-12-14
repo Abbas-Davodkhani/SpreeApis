@@ -13,14 +13,30 @@ namespace SpreeApis.Controllers
         [HttpGet]
         public async Task Get()
         {
-            SpreeDbContext dbContext = new SpreeDbContext();
+            var result = await RequestToGetProduct(1, 400);
+            await SyncProduct(result);
+
+            long requestCount = result.Meta.TotalPages;
+
+            for (int i = 2; i <= requestCount; i++)
+            {
+                result = await RequestToGetProduct(i, 400);
+                await SyncProduct(result);
+            }
+            
+        }
+        private async Task<Temperatures> RequestToGetProduct(int page , int per_page)
+        {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/v2/storefront/products?page=1&per_page=3&include=default_variant,variants,option_types,product_properties,taxons,images,primary_variant&filter[taxons]=10673");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/v2/storefront/products?page={page}&per_page={per_page}&include=default_variant,variants,option_types,product_properties,taxons,images,primary_variant&filter[taxons]=10673");
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             string res = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Temperatures>(res);
-
+            return JsonConvert.DeserializeObject<Temperatures>(res);
+        }
+        private async Task SyncProduct(Temperatures result)
+        {
+            SpreeDbContext dbContext = new SpreeDbContext();
             #region Product
             List<SpreeProductVariant> spreeProductVariants = new();
             List<SpreeProductProperty> spreeProductProperties = new();
@@ -467,7 +483,7 @@ namespace SpreeApis.Controllers
             {
                 foreach (var optionValue in item.OptionValues)
                 {
-                    if(!await dbContext.SpreeOptionValues.AnyAsync(x => x.Id == optionValue.Id))
+                    if (!await dbContext.SpreeOptionValues.AnyAsync(x => x.Id == optionValue.Id))
                     {
                         SpreeOptionValue spreeOptionValue = new()
                         {
